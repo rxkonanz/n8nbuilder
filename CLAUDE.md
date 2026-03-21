@@ -61,6 +61,16 @@ Target: **n8n Cloud** for building AI agents and automations.
 
 For non-trivial workflows, show the design first and get approval before creating.
 
+### Parameter Casing Rules
+
+Before creating or updating any node, always call `get_node` to verify the exact parameter names and their accepted values. Never assume casing.
+
+- **Parameter keys** are `camelCase` — e.g. `chatId`, `returnAll`, `parse_mode` (never `ChatId`, `ReturnAll`)
+- **Enum values** must match exactly — e.g. `"sendMessage"` not `"SendMessage"`, `"getAll"` not `"GetAll"`, `"metadata"` not `"Metadata"`
+- **Resource and operation fields** are always lowercase strings — always set them explicitly, never rely on defaults
+- **Expression output fields** — verify the actual output key from the previous node (e.g. chainLlm outputs `text`, not `output` or `response`) before referencing with `$json.fieldName`
+- When in doubt, retrieve a live workflow with `n8n_get_workflow` (mode `full`) and inspect the saved parameters as the source of truth
+
 ---
 
 ## Conventions
